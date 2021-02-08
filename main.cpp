@@ -442,10 +442,15 @@ int main() {
 				circuit[n][g][d] = transType;
 			}
 		}
-
+		
+		
+		
+		directConnection[n] = true;
+		for (int i = 0; i < truthtable.size(); i++){
+			if (groups[g][i] != '1') {directConnection[n] = false;}
+		}
 	}
-
-
+	
 	/* NOTE:
 	The circuit can be optmized further at this point.
 	If two transistors of the same type and input in the same network are both connected to vdd on one side, they can be merged.
@@ -628,7 +633,21 @@ int main() {
 			vsource = "gnd";
 			myfile << "\n\n***pulldown half" << endl;
 		}
-
+		
+		
+		//in case there should be a direct connection within a transistor network, it's connected without transistors 
+		if (directConnection[n]){
+			if (n == 0){
+				out = "vdd";	
+			} else if (n == 1){
+					out = "gnd";
+			} else if (n == 2) {
+					up = "vdd";
+			} else if (n == 3){
+					down = "gnd";
+			}
+		}
+		/////
 
 		for (int g = 0; g < mysteryNumber; g++) {
 			// the first and last groups to be implemented indicates when the connections should be at vsource and out
